@@ -2,7 +2,7 @@
 
 WhatsApp chat room with real time data flow.
 
-Using React, Redux and Firebase for backend and hosting
+Using React, Redux and Firebase for backend, google authentication and hosting
 
 # Live Demo
 
