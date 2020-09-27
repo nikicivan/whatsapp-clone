@@ -9,11 +9,13 @@ import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 import SidebarChat from "../sidebar-chat/SidebarChat";
 
 import db from "../../firebase";
-import { useStateValue } from "../../StateProvider";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
   const [rooms, setRooms] = useState([]);
-  const [{ user }] = useStateValue();
+
+  const loginUser = useSelector((state) => state.loginUser);
+  const { user } = loginUser;
 
   useEffect(() => {
     if (rooms) {

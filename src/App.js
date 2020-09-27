@@ -1,13 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Chat from "./components/chat/Chat";
 import Login from "./components/login/Login";
 import Sidebar from "./components/sidebar/Sidebar";
-import { useStateValue } from "./StateProvider";
 
 function App() {
-  const [{ user }] = useStateValue();
+  const loginUser = useSelector((state) => state.loginUser);
+  const { user } = loginUser;
 
   return (
     <div className="app">

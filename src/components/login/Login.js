@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@material-ui/core";
 import "./login.css";
 
 import { auth, provider } from "../../firebase";
-import { useStateValue } from "../../StateProvider";
-import { actionTypes } from "../../reducer";
+
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/login/login.actions";
 
 const Login = () => {
-  const [{}, dispatch] = useStateValue();
+  const loginUser = useSelector((state) => state.loginUser);
+  const { user } = loginUser;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      dispatch(login(user));
+    });
+    return () => {
+      unsubscribe();
+    };
+    // eslint-disable-next-line
+  }, [user]);
 
   const signin = () => {
     auth.signInWithPopup(provider).then((result) => {
-      dispatch({
-        type: actionTypes.SET_USER,
-        user: result.user,
-        token: result.refreshToken,
-      });
+      dispatch(login(result.user));
     }).catch((error) => alert(error.message));
   };
 
@@ -23,7 +33,7 @@ const Login = () => {
     <div className="login">
       <div className="login__container">
         <img
-          src="https://lh3.googleusercontent.com/proxy/lptEFvK3ulkM7Sn58E7vQi_5EvZNIHVGXUK7KOe86UO_oE_uiki_SCE51hH4DyB1FnltRBGU4tn-ABIau_0d2pXOjWpjLAsv0UMWcOdaohDtxuZMV6s"
+          src="https://whatsappbrand.com/wp-content/themes/whatsapp-brc/images/WhatsApp_Logo_1.png"
           alt="whatsapp_logo"
         />
         <div className="login_text">

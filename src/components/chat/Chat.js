@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./chat.css";
 
-import { Avatar, IconButton } from "@material-ui/core";
+import { Avatar, Button, IconButton } from "@material-ui/core";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import MicIcon from "@material-ui/icons/Mic";
 import { useParams } from "react-router-dom";
-import db from "../../firebase";
-import { useStateValue } from "../../StateProvider";
+import db, { auth } from "../../firebase";
 import firebase from "firebase";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
   const [seed, setSeed] = useState("");
@@ -18,7 +18,9 @@ const Chat = () => {
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState("");
   const [messages, setMessages] = useState([]);
-  const [{ user }] = useStateValue();
+
+  const loginUser = useSelector((state) => state.loginUser);
+  const { user } = loginUser;
 
   useEffect(() => {
     if (roomId) {
@@ -37,6 +39,12 @@ const Chat = () => {
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
   }, [roomId]);
+
+  const signout = () => {
+    auth.signOut();
+    // dispatch(login({ userCredential: null }));
+    window.location.reload();
+  };
 
   const sendMessage = (e) => {
     e.preventDefault(e);
@@ -74,6 +82,7 @@ const Chat = () => {
           <IconButton>
             <MoreVertIcon />
           </IconButton>
+          <Button onClick={signout}>Signout</Button>
         </div>
       </div>
       <div className="chat__body">
